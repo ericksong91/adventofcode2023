@@ -1,83 +1,63 @@
-number_dict = {
-    "one": "1",
-    "two": "2",
-    "three": "3",
-    "four": "4",
-    "five": "5",
-    "six": "6",
-    "seven": "7",
-    "eight": "8",
-    "nine": "9"
-}
+import re
 
-# 3 numbers with 3 letters
-# 3 numbers with 4 letters
-# 3 numbers with 5 letters
-# do a get with number_dict.get("string being found", None)
-# every time it returns None, keep going until string length is 5, then move onto next five
+# Max # of cubes is 12 red cubes, 13 green cubes, and 14 blue cubes
+# How do I parse the input? 
+# How do I keep track of total # of cubes per game?
+# I should just use hardcut offs for variables
 
-# For algo, check first three characters on either end. If it encounters ANY numbers, it just returns
-# the number and exits out. If it doesnt see anything in the first three that matches one two, etc and 3 
-# letters of the other numbers, it just keeps going
+red_max = 12
+green_max = 13
+blue_max = 14
 
-# concatenate the string to check
+find_red = re.compile(r'\d+\s*red?')
+find_green = re.compile(r'\d+\s*green?')
+find_blue = re.compile(r'\d+\s*blue?')
 
-# analyze left to right
+# Lets parse each line, lets also check the inputs
 
-# raw_input = open('data.txt', 'r').read().split('\n')
+raw_input = open('data.txt', 'r').read().split('\n')
+
+# I should grab each line, separate it by game
+# After separating it, use RegEx to grab the numbers 
 
 def alg_parse(str):
+    green = ' '.join(find_green.findall(str))
+    red = ' '.join(find_red.findall(str))
+    blue = ' '.join(find_blue.findall(str))
+
+    red = [int(s) for s in re.findall(r'\b\d+\b', red)]
+    green = [int(s) for s in re.findall(r'\b\d+\b', green)]
+    blue = [int(s) for s in re.findall(r'\b\d+\b', blue)]
+
+    # print(next((x for x in red if int(x) > red_max), None))
+    # print(next((x for x in green if int(x) > green_max), None))
+    # print(next((x for x in blue if int(x) > blue_max), None))
+
+    if next((x for x in red if int(x) > red_max), None) or next((x for x in green if int(x) > green_max), None) or next((x for x in blue if int(x) > blue_max), None):
+        return False
+    else:
+        return True
+
+
+def parse_list(data):
     i = 0
-    num_list = []
-    
-    while i < len(str):
-        if str[i].isdigit():
-            num_list.append(str[i])
-            break
-        elif i + 2 < len(str) and number_dict.get(f"{str[i]}" + f"{str[i + 1]}" + f"{str[i + 2]}"):
-            num_list.append(number_dict.get(f"{str[i]}" + f"{str[i + 1]}" + f"{str[i + 2]}"))
-            break
-        elif i + 3 < len(str) and number_dict.get(f"{str[i]}" + f"{str[i + 1]}" + f"{str[i + 2]}" + f"{str[i + 3]}"):
-            num_list.append(number_dict.get(f"{str[i]}" + f"{str[i + 1]}" + f"{str[i + 2]}" + f"{str[i + 3]}"))
-            break
-        elif i + 4 < len(str) and number_dict.get(f"{str[i]}" + f"{str[i + 1]}" + f"{str[i+2]}" + f"{str[i+3]}" + f"{str[i+4]}"):
-            num_list.append(number_dict.get(f"{str[i]}" + f"{str[i + 1]}" + f"{str[i+2]}" + f"{str[i+3]}" + f"{str[i+4]}"))
-            break
+    list = []
+
+    while i < len(data):
+        result = alg_parse(data[i])
+
+        if result == True:
+            list.append(i + 1)
+            i += 1
         else:
             i += 1
     
-    h = len(str) - 1 if len(str) - 1 > 0 else i
+    print("Only games:", sum(list))
 
-    while h >= i:
-        if str[h].isdigit():
-            num_list.append(str[h])
-            break
-        elif h - 2 > 0 and number_dict.get(f"{str[h - 2]}" + f"{str[h - 1]}" + f"{str[h]}"):
-            num_list.append(number_dict.get(f"{str[h - 2]}" + f"{str[h - 1]}" + f"{str[h]}"))
-            break
-        elif h - 3 > 0 and number_dict.get(f"{str[h - 3]}" + f"{str[h - 2]}" + f"{str[h - 1]}" + f"{str[h]}"):
-            num_list.append(number_dict.get(f"{str[h - 3]}" + f"{str[h - 2]}" + f"{str[h - 1]}" + f"{str[h]}"))
-            break
-        elif h - 4 > 0 and number_dict.get(f"{str[h - 4]}" + f"{str[h - 3]}" + f"{str[h - 2]}" + f"{str[h - 1]}" + f"{str[h]}"):
-            num_list.append(number_dict.get(f"{str[h - 4]}" + f"{str[h - 3]}" + f"{str[h - 2]}" + f"{str[h - 1]}" + f"{str[h]}"))
-            break
-        else:
-            h -= 1
+    return list
 
-    return int(''.join(num_list))
 
-def parse_list(list):
-    i = 0
-    full_list = []
-
-    while i < len(list):
-        full_list.append(alg_parse(list[i]))
-        i += 1
-
-    return sum(full_list)
-
-# parse_list(raw_input)
-
-# str = "fourfourthreehnbhkmscqxdfksg64bvpppznkh"
+# str = "Game 100: 1 blue, 6 red; 1 green, 2 red; 1 blue, 8 green, 1 red; 1 red, 7 blue"
 
 # alg_parse(str)
+parse_list(raw_input)
