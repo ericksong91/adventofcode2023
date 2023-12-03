@@ -1,4 +1,4 @@
-raw_input = open('data.txt', 'r').read().split('\n')
+raw_input = open('../data.txt', 'r').read().split('\n')
 
 def alg_parse(str):
     i = 0

@@ -3,7 +3,7 @@ import unittest
 from main import alg_parse
 from main import parse_list
 
-raw_input = open('data.txt', 'r').read().split('\n')
+raw_input = open('../data.txt', 'r').read().split('\n')
 
 class TestAlg(unittest.TestCase):
     def test_basic(self):
