@@ -15,7 +15,7 @@ find_blue = re.compile(r'\d+\s*blue?')
 
 # Lets parse each line, lets also check the inputs
 
-raw_input = open('data.txt', 'r').read().split('\n')
+raw_input = open('../data.txt', 'r').read().split('\n')
 
 # I should grab each line, separate it by game
 # After separating it, use RegEx to grab the numbers 
